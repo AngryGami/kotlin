@@ -33,6 +33,7 @@ internal class LLFirLazyTransformerExecutor {
 
             lockProvider.withLock(designation, phase) {
                 lazyTransformer.transformDeclaration(phaseRunner)
+                lazyTransformer.updatePhaseForDeclarationInternals(designation.target)
                 lazyTransformer.checkIsResolved(designation.target)
             }
         }
