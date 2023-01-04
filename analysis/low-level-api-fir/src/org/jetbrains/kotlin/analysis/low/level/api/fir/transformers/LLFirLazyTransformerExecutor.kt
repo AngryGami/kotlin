@@ -28,9 +28,13 @@ internal class LLFirLazyTransformerExecutor {
                 designation,
                 scopeSession,
                 lockProvider,
-                towerDataContextCollector
-            )
-            lazyTransformer.transformDeclaration(phaseRunner)
+                towerDataContextCollector,
+            ) ?: return
+
+            lockProvider.withLock(designation, phase) {
+                lazyTransformer.transformDeclaration(phaseRunner)
+                lazyTransformer.checkIsResolved(designation.target)
+            }
         }
     }
 }
