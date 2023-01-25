@@ -18,7 +18,9 @@ import org.jetbrains.kotlin.fir.declarations.FirFile
 import org.jetbrains.kotlin.fir.declarations.FirResolvePhase
 import org.jetbrains.kotlin.fir.symbols.lazyResolveToPhase
 import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.psi.psiUtil.*
+import org.jetbrains.kotlin.psi.psiUtil.isAncestor
+import org.jetbrains.kotlin.psi.psiUtil.isObjectLiteral
+import org.jetbrains.kotlin.psi.psiUtil.parentsWithSelf
 import org.jetbrains.kotlin.psi2ir.deparenthesize
 
 
@@ -116,6 +118,16 @@ internal fun PsiElement.getNonLocalContainingOrThisDeclaration(predicate: (KtDec
         when (parent) {
             is KtScript -> propose(parent)
             is KtDestructuringDeclaration -> propose(parent)
+            is KtAnonymousInitializer -> {
+                val container = parent.containingDeclaration
+                if (container is KtClassOrObject &&
+                    !container.isObjectLiteral() &&
+                    declarationCanBeLazilyResolved(container) &&
+                    predicate(parent)
+                ) {
+                    propose(parent)
+                }
+            }
             is KtNamedDeclaration -> {
                 val isKindApplicable = when (parent) {
                     is KtClassOrObject -> !parent.isObjectLiteral()
