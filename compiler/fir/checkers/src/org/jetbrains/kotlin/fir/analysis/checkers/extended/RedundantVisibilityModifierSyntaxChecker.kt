@@ -232,7 +232,8 @@ object RedundantVisibilityModifierSyntaxChecker : FirDeclarationSyntaxChecker<Fi
         val scope = containingClass.unsubstitutedScope(
             context.sessionHolder.session,
             context.sessionHolder.scopeSession,
-            withForcedTypeCalculator = false
+            withForcedTypeCalculator = false,
+            requiredPhase = null,
         )
 
         return findBiggestVisibility { checkVisibility ->
@@ -250,7 +251,8 @@ object RedundantVisibilityModifierSyntaxChecker : FirDeclarationSyntaxChecker<Fi
         val scope = containingClass.unsubstitutedScope(
             context.sessionHolder.session,
             context.sessionHolder.scopeSession,
-            withForcedTypeCalculator = false
+            withForcedTypeCalculator = false,
+            requiredPhase = null,
         )
 
         return findBiggestVisibility {
@@ -265,7 +267,8 @@ object RedundantVisibilityModifierSyntaxChecker : FirDeclarationSyntaxChecker<Fi
         val scope = currentClassSymbol.unsubstitutedScope(
             context.sessionHolder.session,
             context.sessionHolder.scopeSession,
-            withForcedTypeCalculator = false
+            withForcedTypeCalculator = false,
+            requiredPhase = null,
         )
 
         return findBiggestVisibility {
