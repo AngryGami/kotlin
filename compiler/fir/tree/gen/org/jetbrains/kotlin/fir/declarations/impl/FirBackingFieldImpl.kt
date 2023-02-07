@@ -159,6 +159,8 @@ open class FirBackingFieldImpl @FirImplementationDetail constructor(
         resolveState = newResolveState
     }
 
+    override fun replaceAttributes(newAttributes: FirDeclarationAttributes) {}
+
     override fun replaceReturnTypeRef(newReturnTypeRef: FirTypeRef) {
         returnTypeRef = newReturnTypeRef
     }
@@ -170,6 +172,8 @@ open class FirBackingFieldImpl @FirImplementationDetail constructor(
     override fun replaceDeprecationsProvider(newDeprecationsProvider: DeprecationsProvider) {
         deprecationsProvider = newDeprecationsProvider
     }
+
+    override fun replaceDispatchReceiverType(newDispatchReceiverType: ConeSimpleKotlinType?) {}
 
     override fun replaceContextReceivers(newContextReceivers: List<FirContextReceiver>) {
         contextReceivers = newContextReceivers.toMutableOrEmpty()
@@ -189,5 +193,9 @@ open class FirBackingFieldImpl @FirImplementationDetail constructor(
 
     override fun replaceAnnotations(newAnnotations: List<FirAnnotation>) {
         annotations = newAnnotations.toMutableOrEmpty()
+    }
+
+    override fun replaceStatus(newStatus: FirDeclarationStatus) {
+        status = newStatus
     }
 }

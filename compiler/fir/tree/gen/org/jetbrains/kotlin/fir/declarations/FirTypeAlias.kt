@@ -40,6 +40,10 @@ abstract class FirTypeAlias : FirClassLikeDeclaration(), FirTypeParametersOwner 
 
     abstract override fun replaceResolveState(newResolveState: FirResolveState)
 
+    abstract override fun replaceAttributes(newAttributes: FirDeclarationAttributes)
+
+    abstract override fun replaceStatus(newStatus: FirDeclarationStatus)
+
     abstract override fun replaceDeprecationsProvider(newDeprecationsProvider: DeprecationsProvider)
 
     abstract fun replaceExpandedTypeRef(newExpandedTypeRef: FirTypeRef)

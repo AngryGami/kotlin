@@ -139,6 +139,12 @@ internal class FirSimpleFunctionImpl(
         resolveState = newResolveState
     }
 
+    override fun replaceAttributes(newAttributes: FirDeclarationAttributes) {}
+
+    override fun replaceStatus(newStatus: FirDeclarationStatus) {
+        status = newStatus
+    }
+
     override fun replaceReturnTypeRef(newReturnTypeRef: FirTypeRef) {
         returnTypeRef = newReturnTypeRef
     }
@@ -150,6 +156,8 @@ internal class FirSimpleFunctionImpl(
     override fun replaceDeprecationsProvider(newDeprecationsProvider: DeprecationsProvider) {
         deprecationsProvider = newDeprecationsProvider
     }
+
+    override fun replaceDispatchReceiverType(newDispatchReceiverType: ConeSimpleKotlinType?) {}
 
     override fun replaceContextReceivers(newContextReceivers: List<FirContextReceiver>) {
         contextReceivers = newContextReceivers.toMutableOrEmpty()

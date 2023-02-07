@@ -174,6 +174,12 @@ internal class FirPropertyImpl(
         resolveState = newResolveState
     }
 
+    override fun replaceAttributes(newAttributes: FirDeclarationAttributes) {}
+
+    override fun replaceStatus(newStatus: FirDeclarationStatus) {
+        status = newStatus
+    }
+
     override fun replaceReturnTypeRef(newReturnTypeRef: FirTypeRef) {
         returnTypeRef = newReturnTypeRef
     }
@@ -185,6 +191,8 @@ internal class FirPropertyImpl(
     override fun replaceDeprecationsProvider(newDeprecationsProvider: DeprecationsProvider) {
         deprecationsProvider = newDeprecationsProvider
     }
+
+    override fun replaceDispatchReceiverType(newDispatchReceiverType: ConeSimpleKotlinType?) {}
 
     override fun replaceInitializer(newInitializer: FirExpression?) {
         initializer = newInitializer

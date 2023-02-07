@@ -15,7 +15,6 @@ import org.jetbrains.kotlin.fir.MutableOrEmptyList
 import org.jetbrains.kotlin.fir.builder.FirAnnotationContainerBuilder
 import org.jetbrains.kotlin.fir.builder.FirBuilderDsl
 import org.jetbrains.kotlin.fir.builder.toMutableOrEmpty
-import org.jetbrains.kotlin.fir.caches.firCachesFactory
 import org.jetbrains.kotlin.fir.declarations.*
 import org.jetbrains.kotlin.fir.declarations.builder.FirRegularClassBuilder
 import org.jetbrains.kotlin.fir.expressions.FirAnnotation
@@ -129,6 +128,14 @@ class FirJavaClass @FirImplementationDetail internal constructor(
 
     override fun replaceAnnotations(newAnnotations: List<FirAnnotation>) {
         error("${::replaceAnnotations.name} should not be called for ${this::class.simpleName}, ${annotations::class.simpleName} is lazily calculated")
+    }
+
+    override fun replaceAttributes(newAttributes: FirDeclarationAttributes) {
+        thrownFieldInJavaDeclarationCannotBeReplacedError(::attributes)
+    }
+
+    override fun replaceStatus(newStatus: FirDeclarationStatus) {
+        thrownFieldInJavaDeclarationCannotBeReplacedError(::status)
     }
 
     override fun <D> transformAnnotations(transformer: FirTransformer<D>, data: D): FirJavaClass {

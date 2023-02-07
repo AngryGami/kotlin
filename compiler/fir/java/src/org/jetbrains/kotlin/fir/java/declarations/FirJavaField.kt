@@ -163,6 +163,18 @@ class FirJavaField @FirImplementationDetail constructor(
 
     override fun replaceControlFlowGraphReference(newControlFlowGraphReference: FirControlFlowGraphReference?) {}
 
+    override fun replaceAttributes(newAttributes: FirDeclarationAttributes) {
+        thrownFieldInJavaDeclarationCannotBeReplacedError(::attributes)
+    }
+
+    override fun replaceStatus(newStatus: FirDeclarationStatus) {
+        thrownFieldInJavaDeclarationCannotBeReplacedError(::status)
+    }
+
+    override fun replaceDispatchReceiverType(newDispatchReceiverType: ConeSimpleKotlinType?) {
+        thrownFieldInJavaDeclarationCannotBeReplacedError(::dispatchReceiverType)
+    }
+
     override fun replaceContextReceivers(newContextReceivers: List<FirContextReceiver>) {
         error("Body cannot be replaced for FirJavaField")
     }

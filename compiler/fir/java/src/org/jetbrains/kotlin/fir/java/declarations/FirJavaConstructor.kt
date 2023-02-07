@@ -151,6 +151,18 @@ class FirJavaConstructor @FirImplementationDetail constructor(
         error("Context receivers cannot be replaced for FirJavaConstructor")
     }
 
+    override fun replaceAttributes(newAttributes: FirDeclarationAttributes) {
+        thrownFieldInJavaDeclarationCannotBeReplacedError(::attributes)
+    }
+
+    override fun replaceStatus(newStatus: FirDeclarationStatus) {
+        thrownFieldInJavaDeclarationCannotBeReplacedError(::status)
+    }
+
+    override fun replaceDispatchReceiverType(newDispatchReceiverType: ConeSimpleKotlinType?) {
+        thrownFieldInJavaDeclarationCannotBeReplacedError(::dispatchReceiverType)
+    }
+
     override fun replaceControlFlowGraphReference(newControlFlowGraphReference: FirControlFlowGraphReference?) {}
 
     override fun replaceBody(newBody: FirBlock?) {

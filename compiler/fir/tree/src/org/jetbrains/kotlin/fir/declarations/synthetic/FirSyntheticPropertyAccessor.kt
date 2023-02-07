@@ -167,4 +167,16 @@ class FirSyntheticPropertyAccessor(
     override fun replaceAnnotations(newAnnotations: List<FirAnnotation>) {
         throw AssertionError("Mutation of synthetic property accessor isn't supported")
     }
+
+    override fun replaceAttributes(newAttributes: FirDeclarationAttributes) {
+        throw AssertionError("Mutation of synthetic property accessor isn't supported")
+    }
+
+    override fun replaceStatus(newStatus: FirDeclarationStatus) {
+        throw AssertionError("Mutation of synthetic property accessor isn't supported")
+    }
+
+    override fun replaceDispatchReceiverType(newDispatchReceiverType: ConeSimpleKotlinType?) {
+        throw AssertionError("Mutation of synthetic property accessor isn't supported")
+    }
 }

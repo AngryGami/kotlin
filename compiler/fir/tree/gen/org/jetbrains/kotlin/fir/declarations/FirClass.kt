@@ -44,6 +44,10 @@ sealed class FirClass : FirClassLikeDeclaration(), FirStatement, FirTypeParamete
 
     abstract override fun replaceResolveState(newResolveState: FirResolveState)
 
+    abstract override fun replaceAttributes(newAttributes: FirDeclarationAttributes)
+
+    abstract override fun replaceStatus(newStatus: FirDeclarationStatus)
+
     abstract override fun replaceDeprecationsProvider(newDeprecationsProvider: DeprecationsProvider)
 
     abstract fun replaceSuperTypeRefs(newSuperTypeRefs: List<FirTypeRef>)
