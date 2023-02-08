@@ -166,16 +166,13 @@ internal fun createLTOFinalPipelineConfig(
 
 /**
  * Prepares and executes LLVM pipeline on the given [llvmModule].
- *
- * Note: this class is intentionally uncoupled from [Context].
- * Please avoid depending on it.
  */
 abstract class LlvmOptimizationPipeline(
         private val config: LlvmPipelineConfig,
         private val logger: LoggingContext? = null
 ) : Closeable {
     abstract fun configurePipeline(config: LlvmPipelineConfig, manager: LLVMPassManagerRef, builder: LLVMPassManagerBuilderRef)
-    open fun executeCustomPasses(config: LlvmPipelineConfig, module: LLVMModuleRef) {}
+    open fun executeCustomPreprocessing(config: LlvmPipelineConfig, module: LLVMModuleRef) {}
     abstract val pipelineName: String
 
     private val arena = Arena()
@@ -211,7 +208,7 @@ abstract class LlvmOptimizationPipeline(
             LLVMAddAnalysisPasses(targetMachine, passManager)
 
             configurePipeline(config, passManager, passBuilder)
-            executeCustomPasses(config, llvmModule)
+            executeCustomPreprocessing(config, llvmModule)
             // TODO: how to log content of pass manager?
             logger?.log {
                 """
@@ -290,7 +287,7 @@ class MandatoryOptimizationPipeline(config: LlvmPipelineConfig, logger: LoggingC
         }
     }
 
-    override fun executeCustomPasses(config: LlvmPipelineConfig, module: LLVMModuleRef) {
+    override fun executeCustomPreprocessing(config: LlvmPipelineConfig, module: LLVMModuleRef) {
         if (config.makeDeclarationsHidden) {
             makeVisibilityHiddenLikeLlvmInternalizePass(module)
         }
@@ -334,7 +331,7 @@ class ThreadSanitizerPipeline(config: LlvmPipelineConfig, logger: LoggingContext
         LLVMAddThreadSanitizerPass(manager)
     }
 
-    override fun executeCustomPasses(config: LlvmPipelineConfig, module: LLVMModuleRef) {
+    override fun executeCustomPreprocessing(config: LlvmPipelineConfig, module: LLVMModuleRef) {
         getFunctions(module)
                 .filter { LLVMIsDeclaration(it) == 0 }
                 .forEach { addLlvmFunctionEnumAttribute(it, LlvmFunctionAttribute.SanitizeThread) }

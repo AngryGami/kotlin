@@ -92,7 +92,7 @@ internal val ModuleBitcodeOptimizationPhase = optimizationPipelinePass(
 
 internal val LTOBitcodeOptimizationPhase = optimizationPipelinePass(
         name = "LTOBitcodeOptimization",
-        description = "Optimize bitcode slower, but better",
+        description = "Runs llvm lto pipeline",
         pipeline = ::LTOOptimizationPipeline
 )
 
