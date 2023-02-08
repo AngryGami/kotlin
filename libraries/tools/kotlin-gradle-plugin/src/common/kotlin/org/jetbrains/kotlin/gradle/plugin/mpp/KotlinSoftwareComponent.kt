@@ -84,12 +84,14 @@ abstract class KotlinSoftwareComponent(
             }
 
             val sourcesElements = metadataTarget.sourcesElementsConfigurationName
-            addSourcesJarArtifactToConfiguration(sourcesElements)
-            this += DefaultKotlinUsageContext(
-                compilation = metadataTarget.compilations.getByName(MAIN_COMPILATION_NAME),
-                dependencyConfigurationName = sourcesElements,
-                includeIntoProjectStructureMetadata = false,
-            )
+            if (metadataTarget.publishSources) {
+                addSourcesJarArtifactToConfiguration(sourcesElements)
+                this += DefaultKotlinUsageContext(
+                    compilation = metadataTarget.compilations.getByName(MAIN_COMPILATION_NAME),
+                    dependencyConfigurationName = sourcesElements,
+                    includeIntoProjectStructureMetadata = false,
+                )
+            }
         }
     }
 
