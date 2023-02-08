@@ -18,6 +18,7 @@ internal annotation class PredefinedTestCase(
     val runnerType: TestRunnerType,
     val freeCompilerArgs: Array<String>,
     val sourceLocations: Array<String>,
+    val ignoredFiles: Array<String> = [],
     val ignoredTests: Array<String> = []
 )
 
