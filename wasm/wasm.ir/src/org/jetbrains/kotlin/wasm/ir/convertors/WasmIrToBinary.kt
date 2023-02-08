@@ -35,13 +35,15 @@ class WasmIrToBinary(
         with(module) {
             // type section
             appendSection(1u) {
-                val numRecGroups = if (recGroupTypes.isEmpty()) 0 else 1
-                appendVectorSize(functionTypes.size + numRecGroups)
-                functionTypes.forEach { appendFunctionTypeDeclaration(it) }
-                if (!recGroupTypes.isEmpty()) {
-                    b.writeByte(0x4f)
-                    appendVectorSize(recGroupTypes.size)
-                    recGroupTypes.forEach {
+//                appendVectorSize(functionTypes.size + recGroupTypes.size)
+//                functionTypes.forEach { appendFunctionTypeDeclaration(it) }
+                appendVectorSize(recGroupTypes.size)
+                recGroupTypes.forEach { recGroup ->
+                    if (recGroup.size > 1) {
+                        b.writeByte(0x4f)
+                        appendVectorSize(recGroup.size)
+                    }
+                    recGroup.forEach {
                         when (it) {
                             is WasmStructDeclaration -> appendStructTypeDeclaration(it)
                             is WasmArrayDeclaration -> appendArrayTypeDeclaration(it)
@@ -173,10 +175,12 @@ class WasmIrToBinary(
             // https://github.com/WebAssembly/extended-name-section/blob/main/document/core/appendix/custom.rst
 
             appendSection(4u) {
-                appendVectorSize(module.recGroupTypes.size)
-                module.recGroupTypes.forEach {
-                    appendModuleFieldReference(it)
-                    b.writeString(it.name)
+                appendVectorSize(module.recGroupTypes.sumOf { it.size })
+                module.recGroupTypes.forEach { recGroup ->
+                    recGroup.forEach {
+                        appendModuleFieldReference(it)
+                        b.writeString(it.name)
+                    }
                 }
             }
 
@@ -401,8 +405,8 @@ class WasmIrToBinary(
             return
         }
         b.writeByte(0) // attribute
-        assert(t.type.id != null) { "Unlinked tag id" }
-        b.writeVarUInt32(t.type.id!!)
+        assert(t.type.owner.id != null) { "Unlinked tag id" }
+        b.writeVarUInt32(t.type.owner.id!!)
     }
 
     private fun appendExpr(expr: Iterable<WasmInstr>) {

@@ -14,7 +14,6 @@ import java.nio.ByteBuffer
 class WasmBinaryToIR(val b: MyByteReader) {
     val validVersion = 1u
 
-    val functionTypes: MutableList<WasmFunctionType> = mutableListOf()
     val gcTypes: MutableList<WasmTypeDeclaration> = mutableListOf()
 
     val importsInOrder: MutableList<WasmNamedModuleField> = mutableListOf()
@@ -80,7 +79,7 @@ class WasmBinaryToIR(val b: MyByteReader) {
                         forEachVectorElement {
                             when (val type = readTypeDeclaration()) {
                                 is WasmFunctionType ->
-                                    functionTypes += type
+                                    gcTypes += type
                                 is WasmStructDeclaration ->
                                     gcTypes += type
                                 is WasmArrayDeclaration -> {}
@@ -94,12 +93,13 @@ class WasmBinaryToIR(val b: MyByteReader) {
                             val importPair = WasmImportDescriptor(readString(), readString())
                             when (val kind = b.readByte().toInt()) {
                                 0 -> {
-                                    val type = functionTypes[b.readVarUInt32AsInt()]
-                                    importedFunctions += WasmFunction.Imported(
-                                        name = "",
-                                        type = WasmSymbol(type),
-                                        importPair = importPair,
-                                    ).also { importsInOrder.add(it) }
+
+//                                    val type = functionTypes[b.readVarUInt32AsInt()]
+//                                    importedFunctions += WasmFunction.Imported(
+//                                        name = "",
+//                                        type = WasmSymbol(type),
+//                                        importPair = importPair,
+//                                    ).also { importsInOrder.add(it) }
                                 }
                                 // Table
                                 1 -> {
@@ -137,16 +137,16 @@ class WasmBinaryToIR(val b: MyByteReader) {
                     // Function section
                     3 -> {
                         forEachVectorElement {
-                            val functionType = functionTypes[b.readVarUInt32AsInt()]
-                            definedFunctions.add(
-                                WasmFunction.Defined(
-                                    "",
-                                    WasmSymbol(functionType),
-                                    locals = functionType.parameterTypes.mapIndexed { index, wasmType ->
-                                        WasmLocal(index, "", wasmType, true)
-                                    }.toMutableList()
-                                )
-                            )
+//                            val functionType = functionTypes[b.readVarUInt32AsInt()]
+//                            definedFunctions.add(
+//                                WasmFunction.Defined(
+//                                    "",
+//                                    WasmSymbol(functionType),
+//                                    locals = functionType.parameterTypes.mapIndexed { index, wasmType ->
+//                                        WasmLocal(index, "", wasmType, true)
+//                                    }.toMutableList()
+//                                )
+//                            )
                         }
                     }
 
@@ -328,8 +328,7 @@ class WasmBinaryToIR(val b: MyByteReader) {
         }
 
         return WasmModule(
-            functionTypes = functionTypes,
-            recGroupTypes = gcTypes,
+            recGroupTypes = emptyList(),//gcTypes,
             importsInOrder = importsInOrder,
             importedFunctions = importedFunctions,
             importedMemories = importedMemories,
@@ -359,11 +358,13 @@ class WasmBinaryToIR(val b: MyByteReader) {
         )
     }
 
+    @Suppress("UNUSED_PARAMETER")
     private fun readTag(importPair: WasmImportDescriptor? = null): WasmTag {
         val attribute = b.readByte()
         check(attribute.toInt() == 0) { "as per spec" }
-        val type = functionTypes[b.readVarUInt32AsInt()]
-        return WasmTag(type, importPair)
+//        val type = functionTypes[b.readVarUInt32AsInt()]
+//        return WasmTag(type, importPair)
+        TODO()
     }
 
     private fun readExpression(): MutableList<WasmInstr> =
@@ -424,7 +425,7 @@ class WasmBinaryToIR(val b: MyByteReader) {
                 WasmImmediateKind.FUNC_IDX -> WasmImmediate.FuncIdx(funByIdx(b.readVarUInt32AsInt()))
                 WasmImmediateKind.LOCAL_IDX -> WasmImmediate.LocalIdx(locals[b.readVarUInt32AsInt()])
                 WasmImmediateKind.GLOBAL_IDX -> WasmImmediate.GlobalIdx(globalByIdx(b.readVarUInt32AsInt()))
-                WasmImmediateKind.TYPE_IDX -> WasmImmediate.TypeIdx(functionTypes[b.readVarUInt32AsInt()])
+                WasmImmediateKind.TYPE_IDX -> TODO()//WasmImmediate.TypeIdx(functionTypes[b.readVarUInt32AsInt()])
                 WasmImmediateKind.MEMORY_IDX -> WasmImmediate.MemoryIdx(b.readVarUInt32AsInt())
                 WasmImmediateKind.DATA_IDX -> WasmImmediate.DataIdx(b.readVarUInt32AsInt())
                 WasmImmediateKind.TABLE_IDX -> WasmImmediate.TableIdx(b.readVarUInt32AsInt())
@@ -479,7 +480,7 @@ class WasmBinaryToIR(val b: MyByteReader) {
     private fun readBlockType(): WasmImmediate.BlockType {
         val code = b.readVarInt64()
         return when {
-            code >= 0 -> WasmImmediate.BlockType.Function(functionTypes[code.toInt()])
+            code >= 0 -> TODO()//WasmImmediate.BlockType.Function(functionTypes[code.toInt()])
             code == -0x40L -> WasmImmediate.BlockType.Value(null)
             else -> WasmImmediate.BlockType.Value(readValueTypeImpl(code.toByte()))
         }
