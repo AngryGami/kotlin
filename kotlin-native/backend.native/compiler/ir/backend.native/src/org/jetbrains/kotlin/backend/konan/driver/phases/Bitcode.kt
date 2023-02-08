@@ -162,10 +162,8 @@ internal fun PhaseEngine<NativeGenerationState>.runBitcodePostProcessing() {
     val optimizationConfig = createLTOFinalPipelineConfig(context, context.llvm.targetTriple, closedWorld = context.llvmModuleSpecification.isFinal)
     useContext(OptimizationState(context.config, context.llvmModule, optimizationConfig)) {
         it.runPhase(MandatoryBitcodeLLVMPostprocessingPhase)
-        if (context.shouldOptimize()) {
-            it.runPhase(ModuleBitcodeOptimizationPhase)
-            it.runPhase(LTOBitcodeOptimizationPhase)
-        }
+        it.runPhase(ModuleBitcodeOptimizationPhase)
+        it.runPhase(LTOBitcodeOptimizationPhase)
         when (context.config.sanitizer) {
             SanitizerKind.THREAD -> it.runPhase(ThreadSanitizerPhase)
             SanitizerKind.ADDRESS -> context.reportCompilationError("Address sanitizer is not supported yet")
