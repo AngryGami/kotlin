@@ -1,6 +1,6 @@
 // WITH_STDLIB
 // TARGET_BACKEND: JVM_IR
-// LANGUAGE: +ValueClasses
+// LANGUAGE: +ValueClasses, +ProperFunctionManglingForJavaInterop
 
 // FILE: Point.kt
 

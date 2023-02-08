@@ -25643,6 +25643,12 @@ public class FirBlackBoxCodegenTestGenerated extends AbstractFirBlackBoxCodegenT
             public void testMethodWithInlineClassInheritedInJavaOverriddenInKotlin() throws Exception {
                 runTest("compiler/testData/codegen/box/inlineClasses/javaInterop/methodWithInlineClassInheritedInJavaOverriddenInKotlin.kt");
             }
+
+            @Test
+            @TestMetadata("properFunctionManglingForJavaInteropOff.kt")
+            public void testProperFunctionManglingForJavaInteropOff() throws Exception {
+                runTest("compiler/testData/codegen/box/inlineClasses/javaInterop/properFunctionManglingForJavaInteropOff.kt");
+            }
         }
 
         @Nested
