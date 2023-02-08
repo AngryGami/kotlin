@@ -389,7 +389,10 @@ class JvmSymbols(
         createClass(FqName("kotlin.jvm.internal.AdaptedFunctionReference"), classModality = Modality.OPEN) { klass ->
             klass.superTypes = listOf(irBuiltIns.anyType)
             klass.generateCallableReferenceSuperclassConstructors(withArity = true)
+            klass.addField("receiver", irBuiltIns.anyNType, DescriptorVisibilities.PROTECTED)
         }
+
+    val adaptedFunctionReferenceReceiverField: IrFieldSymbol = adaptedFunctionReference.fieldByName("receiver")
 
     private fun IrClass.generateCallableReferenceSuperclassConstructors(withArity: Boolean) {
         for (hasBoundReceiver in listOf(false, true)) {

@@ -519,6 +519,11 @@ internal class FunctionReferenceLowering(private val context: JvmBackendContext)
                     else -> context.ir.symbols.functionReference
                 }.defaultType
 
+        private val receiverField = if (useOptimizedSuperClass && isAdaptedReference)
+            context.ir.symbols.adaptedFunctionReferenceReceiverField.owner
+        else
+            context.ir.symbols.functionReferenceReceiverField.owner
+
         private val functionReferenceClass = context.irFactory.buildClass {
             setSourceRange(irFunctionReference)
             visibility = DescriptorVisibilities.LOCAL
@@ -569,8 +574,6 @@ internal class FunctionReferenceLowering(private val context: JvmBackendContext)
 
             return fakeTypeParameters
         }
-
-        private val receiverField = context.ir.symbols.functionReferenceReceiverField.owner
 
         fun build(): IrExpression = context.createJvmIrBuilder(currentScope!!).run {
             irBlock(irFunctionReference.startOffset, irFunctionReference.endOffset) {
