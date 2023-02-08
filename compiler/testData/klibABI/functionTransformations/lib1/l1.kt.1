@@ -60,3 +60,21 @@ object Functions {
 class RemovedDefaultValueInConstructor(a: Int, b: Int) {
     val value = a + b
 }
+
+interface Interface {
+    fun suspendToNonSuspendFunction(x: Int): Int
+    suspend fun nonSuspendToSuspendFunction(x: Int): Int
+}
+
+abstract class AbstractClass {
+    abstract fun suspendToNonSuspendFunction(x: Int): Int
+    abstract suspend fun nonSuspendToSuspendFunction(x: Int): Int
+}
+
+open class OpenClass {
+    open fun suspendToNonSuspendFunction(x: Int): Int = -x
+    open suspend fun nonSuspendToSuspendFunction(x: Int): Int = Functions.wrapCoroutine { -x }
+
+    open fun suspendToNonSuspendFunctionWithDelegation(x: Int): Int = -x
+    open suspend fun nonSuspendToSuspendFunctionWithDelegation(x: Int): Int = Functions.wrapCoroutine { -x }
+}

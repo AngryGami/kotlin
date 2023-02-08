@@ -1,6 +1,13 @@
 import abitestutils.abiTest
 
 fun box() = abiTest {
+    val ii: InterfaceImpl = InterfaceImpl()
+    val i: Interface = ii
+    val aci: AbstractClassImpl = AbstractClassImpl()
+    val ac: AbstractClass = aci
+    val oci: OpenClassImpl = OpenClassImpl()
+    val oc: OpenClass = oci
+
     expectSuccess("memberOperatorsToNonOperators: a=Alice,b=Bob") { memberOperatorsToNonOperators("a" to "Alice", "b" to "Bob") }
     expectSuccess("extensionOperatorsToNonOperators: a=Alice,b=Bob") { extensionOperatorsToNonOperators("a" to "Alice", "b" to "Bob") }
     expectSuccess("memberNonOperatorsToOperators: a=Alice,b=Bob") { memberNonOperatorsToOperators("a" to "Alice", "b" to "Bob") }
@@ -19,9 +26,24 @@ fun box() = abiTest {
 
     expectSuccess(-1) { suspendToNonSuspendFunction1(1) }
     expectSuccess(-2) { suspendToNonSuspendFunction2(2) }
-    // Temporarily muted as it fails:
-    // Native -> NativeAddContinuationToFunctionCallsLowering.kt:25 "IAE: Continuation parameter only exists in lowered suspend functions, but function origin is DEFINED"
-    // JS -> "TypeError: tmp0_safe_receiver.get_context_h02k06_k$ is not a function"
-//    expectFailure(linkage("?")) { nonSuspendToSuspendFunction1(3) } // Fails: Native -> exception in lowering, JS -> "TypeError: tmp0_safe_receiver.get_context_h02k06_k$ is not a function
-    expectSuccess(-4) { nonSuspendToSuspendFunction2(4) }
+    expectSuccess(-3) { suspendToNonSuspendFunction3(3) }
+    expectFailure(linkage("Suspend expression can be called only from a coroutine or another suspend function")) { nonSuspendToSuspendFunction1(4) }
+    expectSuccess(-5) { nonSuspendToSuspendFunction2(5) }
+    expectFailure(linkage("Suspend expression can be called only from a coroutine or another suspend function")) { nonSuspendToSuspendFunction3(6) }
+    expectSuccess(-7) { nonSuspendToSuspendFunction4(7) }
+
+    expectFailure(linkage("?")) { suspendToNonSuspendFunctionInInterface(i, 1) }
+    expectFailure(linkage("Suspend expression can be called only from a coroutine or another suspend function")) { nonSuspendToSuspendFunctionInInterface(i, 2) }
+    expectSuccess(-3) { suspendToNonSuspendFunctionInInterfaceImpl(ii, 3) }
+    expectSuccess(-4) { nonSuspendToSuspendFunctionInInterfaceImpl(ii, 4) }
+    expectFailure(linkage("?")) { suspendToNonSuspendFunctionInAbstractClass(ac, 5) }
+    expectFailure(linkage("Suspend expression can be called only from a coroutine or another suspend function")) { nonSuspendToSuspendFunctionInAbstractClass(ac, 6) }
+    expectSuccess(-7) { suspendToNonSuspendFunctionInAbstractClassImpl(aci, 7) }
+    expectSuccess(-8) { nonSuspendToSuspendFunctionInAbstractClassImpl(aci, 8) }
+    expectFailure(linkage("?")) { suspendToNonSuspendFunctionInOpenClass(oc, 9) }
+    expectFailure(linkage("Suspend expression can be called only from a coroutine or another suspend function")) { nonSuspendToSuspendFunctionInOpenClass(oc, 10) }
+    expectSuccess(-11) { suspendToNonSuspendFunctionInOpenClassImpl(oci, 11) }
+    expectSuccess(-12) { nonSuspendToSuspendFunctionInOpenClassImpl(oci, 12) }
+    expectSuccess(-26) { suspendToNonSuspendFunctionWithDelegation(oci, 13) }
+    expectFailure(linkage("Suspend expression can be called only from a coroutine or another suspend function")) { nonSuspendToSuspendFunctionWithDelegation(oci, 14) }
 }
