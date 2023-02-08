@@ -126,8 +126,6 @@ val distSourcesProjects = listOfNotNull(
     ":kotlin-test:kotlin-test-js".takeIf { !kotlinBuildProperties.isInJpsBuildIdeaSync },
     ":kotlin-test:kotlin-test-junit",
     ":kotlin-test:kotlin-test-junit5",
-    ":kotlin-test:kotlin-test-jvm",
-    ":kotlin-test:kotlin-test-common",
     ":kotlin-test:kotlin-test-testng"
 )
 
@@ -173,6 +171,8 @@ dependencies {
     distSourcesProjects.forEach {
         sources(project(it, configuration = "sources"))
     }
+
+    sources(project(":kotlin-test", "combinedSourcesJar"))
 
     sources(kotlinStdlib("jdk7", classifier = "sources"))
     sources(kotlinStdlib("jdk8", classifier = "sources"))

@@ -142,6 +142,14 @@ val combinedSourcesJar by tasks.registering(Jar::class) {
     }
 }
 
+configurations.create("combinedSourcesJar") {
+    isCanBeConsumed = true
+    isCanBeResolved = false
+
+    artifacts {
+        add("combinedSourcesJar", combinedSourcesJar)
+    }
+}
 
 val rootComponent = componentFactory.adhoc("root").apply {
     addVariantsFromConfiguration(jvmApi) {
