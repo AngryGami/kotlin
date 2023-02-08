@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
 internal val API_VERSION: String = System.getProperty("fir.bench.language.version", "1.4")
 
 // This is used for language version configuration for K2 only. K1 uses LANGUAGE_VERSION_K1
-private val LANGUAGE_VERSION_K2: String = System.getProperty("fir.bench.language.version.k2", "2.0")
+internal val LANGUAGE_VERSION_K2: String = System.getProperty("fir.bench.language.version.k2", "2.0")
 
 class FullPipelineModularizedTest : AbstractFullPipelineModularizedTest() {
 

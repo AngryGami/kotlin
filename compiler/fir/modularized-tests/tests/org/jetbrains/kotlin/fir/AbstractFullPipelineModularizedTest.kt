@@ -134,7 +134,7 @@ abstract class AbstractFullPipelineModularizedTest : AbstractModularizedTest() {
             args.noJdk = originalArguments.noJdk
             args.noStdlib = originalArguments.noStdlib
             args.noReflect = originalArguments.noReflect
-            args.jvmTarget = originalArguments.jvmTargetIfSupported()
+            args.jvmTarget = originalArguments.jvmTargetIfSupported()?.description
             args.jsr305 = originalArguments.jsr305
             args.nullabilityAnnotations = originalArguments.nullabilityAnnotations
             args.jspecifyAnnotations = originalArguments.jspecifyAnnotations

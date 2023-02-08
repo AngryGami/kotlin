@@ -192,8 +192,8 @@ abstract class AbstractModularizedTest : KtUsefulTestCase() {
 }
 
 
-internal fun K2JVMCompilerArguments.jvmTargetIfSupported(): String? {
+internal fun K2JVMCompilerArguments.jvmTargetIfSupported(): JvmTarget? {
     val specified = jvmTarget?.let { JvmTarget.fromString(it) } ?: return null
-    if (specified != JvmTarget.JVM_1_6) return specified.description
+    if (specified != JvmTarget.JVM_1_6) return specified
     return null
 }
