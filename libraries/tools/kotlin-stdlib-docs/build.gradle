@@ -30,7 +30,6 @@ repositories {
     maven {
         url 'https://maven.pkg.jetbrains.space/kotlin/p/dokka/dev'
     }
-    mavenLocal()
 }
 final String dokka_version = findProperty("dokka_version")
 
